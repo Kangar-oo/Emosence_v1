@@ -7,6 +7,9 @@ import base64
 import tensorflow as tf
 import ollama
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 # === LOAD MODEL ===
 # Matches the path where train_model.py saves the file
@@ -75,7 +78,8 @@ async def analyze(payload: ChatPayload):
         ])
         ai_text = response['message']['content']
     except Exception as e:
-        ai_text = f"I hear you. (Local Brain Offline: {e})"
+        logging.exception("❌ Chat Error: Ollama chat failed")
+        ai_text = "I hear you. (Local Brain Offline: temporary technical issue.)"
 
     return {
         "response": ai_text,
